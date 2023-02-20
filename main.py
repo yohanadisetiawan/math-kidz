@@ -22,58 +22,57 @@ def on_left_pressed():
     """), 500, True)
 controller.left.on_event(ControllerButtonEvent.PRESSED, on_left_pressed)
 
-def doQuiz(_level: number, _NPC: Sprite):
-    global result, ask1, ask2, posQuiz
+def doQuiz(_level: number, _sprite: Sprite):
+    global result, ask1, ask2, posQuiz, NPC1, NPC2
     if _level == 1:
         result = 0
-        if convert_to_text(_NPC) == "NPC1":
-            ask1 = randint(0, 5)
-            ask2 = randint(0, 5)
-        else:
-            ask1 = randint(4, 9)
-            ask2 = randint(4, 9)
+        ask1 = randint(0, 9)
+        ask2 = randint(0, 9)
     elif _level == 2:
         result = 0
-        if convert_to_text(_NPC) == "NPC1":
-            ask1 = randint(15, 75)
-            ask2 = randint(10, 70)
-        else:
-            ask1 = randint(20, 99)
-            ask2 = randint(15, 99)
+        ask1 = randint(10, 99)
+        ask2 = randint(10, 99)
     else:
         result = 0
-        if convert_to_text(_NPC) == "NPC1":
-            ask1 = randint(100, 800)
-            ask2 = randint(100, 850)
-        else:
-            ask1 = randint(200, 999)
-            ask2 = randint(150, 900)
+        ask1 = randint(100, 999)
+        ask2 = randint(100, 999)
     pause(100)
-    if story.is_menu_open():
-        if posQuiz % 2 == 1:
-            result = ask1 + ask2
-            game.show_long_text("Calculated:\\n" + convert_to_text(ask1) + "+" + convert_to_text(ask2),
+    if posQuiz % 2 == 1:
+        result = ask1 + ask2
+        game.show_long_text("Calculated:\\n" + convert_to_text(ask1) + "+" + convert_to_text(ask2),
+            DialogLayout.TOP)
+        story.show_player_choices(convert_to_text(result),
+            convert_to_text(result + randint(1, 4)))
+        posQuiz += 1
+    else:
+        result = ask1 - ask2
+        if result < 0:
+            result = ask2 - ask1
+            game.show_long_text("Calculated:\\n" + convert_to_text(ask2) + "-" + convert_to_text(ask1),
                 DialogLayout.TOP)
-            story.show_player_choices(convert_to_text(result),
-                convert_to_text(result + randint(1, 4)))
-            posQuiz += 1
-        else:
-            result = ask1 - ask2
-            if result < 0:
-                result = ask2 - ask1
-                game.show_long_text("Calculated:\\n" + convert_to_text(ask2) + "-" + convert_to_text(ask1),
-                    DialogLayout.TOP)
-                story.show_player_choices(convert_to_text(result - randint(1, 3)),
-                    convert_to_text(result))
-            game.show_long_text("Calculated:\\n" + convert_to_text(ask1) + "-" + convert_to_text(ask2),
-                DialogLayout.TOP)
-            story.show_player_choices(convert_to_text(result),
-                convert_to_text(result - randint(1, 3)))
-            posQuiz = 1
-        if result == int(story.get_last_answer()):
-            info.change_score_by(10)
-        else:
-            info.change_score_by(-5)
+            story.show_player_choices(convert_to_text(result - randint(1, 3)),
+                convert_to_text(result))
+        game.show_long_text("Calculated:\\n" + convert_to_text(ask1) + "-" + convert_to_text(ask2),
+            DialogLayout.TOP)
+        story.show_player_choices(convert_to_text(result),
+            convert_to_text(result - randint(1, 3)))
+        posQuiz = 1
+    if story.check_last_answer(convert_to_text(result)):
+        info.change_score_by(10)
+    else:
+        info.change_score_by(-5)
+    if _sprite == NPC1:
+        sprites.destroy(NPC1, effects.spray, 100)
+        NPC1 = sprites.create(assets.image("""
+            NovitaNPC
+        """), SpriteKind.player)
+        tiles.place_on_random_tile(NPC1, sprites.dungeon.collectible_blue_crystal)
+    else:
+        sprites.destroy(NPC2, effects.smiles, 100)
+        NPC2 = sprites.create(assets.image("""
+            EndangNPC
+        """), SpriteKind.player)
+        tiles.place_on_random_tile(NPC2, sprites.dungeon.collectible_red_crystal)
 
 def on_right_pressed():
     animation.run_image_animation(Dzakir,
@@ -324,7 +323,7 @@ controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
 
 def on_on_overlap2(sprite2, otherSprite2):
     global isLevel
-    if isLevel == 1 or isLevel == 1:
+    if isLevel == 1 or isLevel == 2:
         isLevel += 1
         music.stop_all_sounds()
         music.play(music.create_song(hex("""
@@ -374,7 +373,7 @@ def on_forever():
         controller.move_sprite(Dzakir, 0, 0)
         animation.stop_animation(animation.AnimationTypes.ALL, Dzakir)
     else:
-        controller.move_sprite(Dzakir)
+        controller.move_sprite(Dzakir, 100, 100)
 forever(on_forever)
 
 def on_update_interval():

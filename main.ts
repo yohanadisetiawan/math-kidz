@@ -21,66 +21,59 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function on_left_pressed(
         NgadiniLeft
     `, 500, true)
 })
-function doQuiz(_level: number, _NPC: Sprite) {
+function doQuiz(_level: number, _sprite: Sprite) {
     
     if (_level == 1) {
         result = 0
-        if (convertToText(_NPC) == "NPC1") {
-            ask1 = randint(0, 5)
-            ask2 = randint(0, 5)
-        } else {
-            ask1 = randint(4, 9)
-            ask2 = randint(4, 9)
-        }
-        
+        ask1 = randint(0, 9)
+        ask2 = randint(0, 9)
     } else if (_level == 2) {
         result = 0
-        if (convertToText(_NPC) == "NPC1") {
-            ask1 = randint(15, 75)
-            ask2 = randint(10, 70)
-        } else {
-            ask1 = randint(20, 99)
-            ask2 = randint(15, 99)
-        }
-        
+        ask1 = randint(10, 99)
+        ask2 = randint(10, 99)
     } else {
         result = 0
-        if (convertToText(_NPC) == "NPC1") {
-            ask1 = randint(100, 800)
-            ask2 = randint(100, 850)
-        } else {
-            ask1 = randint(200, 999)
-            ask2 = randint(150, 900)
-        }
-        
+        ask1 = randint(100, 999)
+        ask2 = randint(100, 999)
     }
     
     pause(100)
-    if (story.isMenuOpen()) {
-        if (posQuiz % 2 == 1) {
-            result = ask1 + ask2
-            game.showLongText("Calculated:\\n" + convertToText(ask1) + "+" + convertToText(ask2), DialogLayout.Top)
-            story.showPlayerChoices(convertToText(result), convertToText(result + randint(1, 4)))
-            posQuiz += 1
-        } else {
-            result = ask1 - ask2
-            if (result < 0) {
-                result = ask2 - ask1
-                game.showLongText("Calculated:\\n" + convertToText(ask2) + "-" + convertToText(ask1), DialogLayout.Top)
-                story.showPlayerChoices(convertToText(result - randint(1, 3)), convertToText(result))
-            }
-            
-            game.showLongText("Calculated:\\n" + convertToText(ask1) + "-" + convertToText(ask2), DialogLayout.Top)
-            story.showPlayerChoices(convertToText(result), convertToText(result - randint(1, 3)))
-            posQuiz = 1
+    if (posQuiz % 2 == 1) {
+        result = ask1 + ask2
+        game.showLongText("Calculated:\\n" + convertToText(ask1) + "+" + convertToText(ask2), DialogLayout.Top)
+        story.showPlayerChoices(convertToText(result), convertToText(result + randint(1, 4)))
+        posQuiz += 1
+    } else {
+        result = ask1 - ask2
+        if (result < 0) {
+            result = ask2 - ask1
+            game.showLongText("Calculated:\\n" + convertToText(ask2) + "-" + convertToText(ask1), DialogLayout.Top)
+            story.showPlayerChoices(convertToText(result - randint(1, 3)), convertToText(result))
         }
         
-        if (result == parseInt(story.getLastAnswer())) {
-            info.changeScoreBy(10)
-        } else {
-            info.changeScoreBy(-5)
-        }
-        
+        game.showLongText("Calculated:\\n" + convertToText(ask1) + "-" + convertToText(ask2), DialogLayout.Top)
+        story.showPlayerChoices(convertToText(result), convertToText(result - randint(1, 3)))
+        posQuiz = 1
+    }
+    
+    if (story.checkLastAnswer(convertToText(result))) {
+        info.changeScoreBy(10)
+    } else {
+        info.changeScoreBy(-5)
+    }
+    
+    if (_sprite == NPC1) {
+        sprites.destroy(NPC1, effects.spray, 100)
+        NPC1 = sprites.create(assets.image`
+            NovitaNPC
+        `, SpriteKind.Player)
+        tiles.placeOnRandomTile(NPC1, sprites.dungeon.collectibleBlueCrystal)
+    } else {
+        sprites.destroy(NPC2, effects.smiles, 100)
+        NPC2 = sprites.create(assets.image`
+            EndangNPC
+        `, SpriteKind.Player)
+        tiles.placeOnRandomTile(NPC2, sprites.dungeon.collectibleRedCrystal)
     }
     
 }
@@ -328,7 +321,7 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function on_down_pressed(
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function on_on_overlap2(sprite2: Sprite, otherSprite2: Sprite) {
     
-    if (isLevel == 1 || isLevel == 1) {
+    if (isLevel == 1 || isLevel == 2) {
         isLevel += 1
         music.stopAllSounds()
         music.play(music.createSong(hex`
@@ -381,7 +374,7 @@ forever(function on_forever() {
         controller.moveSprite(Dzakir, 0, 0)
         animation.stopAnimation(animation.AnimationTypes.All, Dzakir)
     } else {
-        controller.moveSprite(Dzakir)
+        controller.moveSprite(Dzakir, 100, 100)
     }
     
 })
