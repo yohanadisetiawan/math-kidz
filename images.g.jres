@@ -1,0 +1,34 @@
+{
+    "image1": {
+        "data": "hwQwADAAAACIiAAAiAAAiAgAgAiIAACICACACAAAiIhod4iAZwiAdoYAaIdnCIB2hgBohwCId4Z4dmeId4doZ2eId4d3h2hnZ4h3h4h2Z4d4Z3eGZ3d4Z3d4Z2dnd3hnd3hnZ2h3doeAd3hmd3Z4Z3d4dmd3dnhnd3h2Z2aHdwiAdodmdmZoZ2dodoZ2ZmhnZ2h2hmZ4ZwgAaGZoaGeIhoaIZ4hoZ4iGhmhniIZmhgAAgGaGiIiIiIiIiIiIiIiIiIiIiGiGiIiAaIaIZmZmZmZmZmZmZmZmZmZmZoh2d4d4d2eIZmZmZmZmZmZmZmZmZmZmZmh3doZoZ3eGZmZmZmZmZmZmZmZmZmZmZnhmdwiAd2aHZmZmZmZmZmZmZmZmZmZmZmh2hwAAeGeGZmZmZmZmZmZmZmZmZmZmZoiIiAAAiIiIZmZmZmZmZmZmZmZmZmZmZoh2ZwiAdmeIZmZmZmZmZmZmZmZmZmZmZmh3d4Zod3eGZmZmZmZmZmZmZmZmZmZmZohmZod4ZmaIZmZmZmZmZmZmZmZmZmZmZmh3d4Zod3eGZmZmZmZmZmZmZmZmZmZmZoh2ZwiAdmeIZmZmZmZmZmZmZmZmZmZmZoiIiAAAiIiIZmZmZmZmZmZmZmZmZmZmZmh2hwAAeGeGZmZmZmZmZmZmZmZmZmZmZnhmdwiAd2aHZmZmZmZmZmZmZmZmZmZmZmh3doZoZ3eGZmZmZmZmZmZmZmZmZmZmZoh2d4d4d2eIZmZmZmZmZmZmZmZmZmZmZohohgiAaIaIZmZmZmZmZmZmZmZmZmZmZoh2d4d4d2eIZmZmZmZmZmZmZmZmZmZmZmh3doZoZ3eGZmZmZmZmZmZmZmZmZmZmZnhmdwiAd2aHZmZmZmZmZmZmZmZmZmZmZmh2hwAAeGeGZmZmZmZmZmZmZmZmZmZmZoiIiAAAiIiIZmZmZmZmZmZmZmZmZmZmZoh2ZwiAdmeIZmZmZmZmZmZmZmZmZmZmZmh3d4Zod3eGZmZmZmZmZmZmZmZmZmZmZohmZod4ZmaIZmZmZmZmZmZmZmZmZmZmZmh3d4Zod3eGZmZmZmZmZmZmZmZmZmZmZoh2ZwiAdmeIZmZmZmZmZmZmZmZmZmZmZoiIiAAAiIiIZmZmZmZmZmZmZmZmZmZmZmh2hwAAeGeGZmZmZmZmZmZmZmZmZmZmZnhmdwiAd2aHZmZmZmZmZmZmZmZmZmZmZmh3doZoZ3eGZmZmZmZmZmZmZmZmZmZmZoh2d4d4d2eIZmZmZmZmZmZmZmZmZmZmZohohgiIiGiGiIiIiIiIiIiIiIiIiIiIiGhmCAAAaGZoiHaGaGiIdoaIdoZoaIh2hoZmhgCAdodmaGeGdnaGZmdoZ4Z2doZmZ2Z4ZwiAd3hmdmeHd3aHZ3d2Z4d3dodnd2aHdwh4Z3eGdnaHd3aHd3Z2dod3dod3dmh3dod4dmeIeHeIdnaGeHd4d4h2doZ4d4h2Z4dod4gAeIYAaGcIgHZ4hgBoZwiAdgiId4aIiAAAgAgAgIgAAIiACACAiAAAiAAAiIg=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "frameDialog"
+    },
+    "image2": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAPAPAAAAAPD///7gRAAA/+/v7k9NAPD/jv/k/v8A8O/4v9GOSP//6PL+34RI/4/o+E7dhCgPj+jyTt2EKA//6Pj+34RI//Dv8r/Rjkj/8P+O/+T+/wAA/+7v7k9NAADw///+4EQAAAAA8A8AAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "Ngadini"
+    },
+    "image3": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAADwAAAAAAAA/2//AAAA8P9mZt//DwAfZv/23T8P8GH23T/zM/9VZf8//TVT/1Bi3939UzMPVWXf3f1TMw/wYf8//TVT//AW9t0/8zP/AG9h//bdPw8A8P9mZt//DwAAAP9v/wAAAAAAAPAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "NovitaNPC"
+    },
+    "image4": {
+        "data": "hwQQABAAAAAAAAAA8A8AAAAA8P//+wAAAPA/s7vr7gAAvzOzu+/0D/A+4//+/7wPX+Szv0G/3fFPRTP+T969/VRF4+5E3t2xVEXj7kTevb1PRTP+T97d8V/ks79Bv7398D7j//7/vA8AvzOzu+/0DwDwP7O76+4AAADw///7AAAAAAAA8A8AAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "EndangNPC"
+    },
+    "anim1": {
+        "namespace": "myAnimations",
+        "id": "anim1",
+        "mimeType": "application/mkcd-animation",
+        "data": "ZjQwMTEwMDAxMDAwMDQwMDAwMDBmZmZmZmYwMDAwMDAwMGYwZjhlZWVlZmYwMDAwMDA4Zjg4ZWZlZWZlMGYwMDAwZWZlZWZlZWZlZTBmMDBmMDhlODhlOGZlZmYwZjAwZjBlOGZmZmY4OGU4MGYwMGYwZmZlZWZlZmZmZmZmMDBmMGVlNDRiZjRlZTRmZjAwMDBlZmRkMWZkNGU0ZmUwMDAwZjBkZGRkZTRlZTBmMDAwMGYwNGU0NGVlZmYwMDAwMDBmMDg4ZThkZDA0MDAwMDAwZjA4OGU4ZGQwZTAwMDAwMGYwMjJmNGVlMGYwMDAwMDAwMGZmZmZmZjAwMDAwMDAwMDAwMGZmMGYwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMGZmZmZmZjAwMDAwMDAwZjBmOGVlZWVmZjAwMDAwMDhmODhlZmVlZmUwZjAwMDBlZmVlZmVlZmVlMGYwMGYwOGU4OGU4ZmVmZjBmMDBmMGU4ZmZmZjg4ZTgwZjAwZjBmZmVlZmVmZmZmZmYwMGYwZWU0NGJmNGVlNGZmMDAwMGVmZGQxZmQ0ZTRmZTAwMDBmMGRkZWRlZWVlMGYwMDAwZjA0ZWRlNGQwZjAwMDAwMGYwODhkZWVkMGYwMDAwMDBmZjIyZWZmZWZmMDAwMDAwZmZmZmZmZmZmZjAwMDAwMGYwZmYwMGYwMGYwMDAwMDAwMGZmZmZmZjAwMDAwMDAwZjBmOGVlZWVmZjAwMDAwMDhmODhlZmVlZmUwZjAwMDBlZmVlZmVlZmVlMGYwMGYwOGU4OGU4ZmVmZjBmMDBmMGU4ZmZmZjg4ZTgwZjAwZjBmZmVlZmVmZmZmZmYwMGYwZWU0NGJmNGVlNGZmMDAwMGVmZGQxZmQ0ZTRmZTAwMDBmMGRkZGRlNGVlMGYwMDAwZjA0ZTQ0ZWVmZjAwMDAwMGYwODhlOGRkMDQwMDAwMDBmMDg4ZThkZDBlMDAwMDAwZjAyMmY0ZWUwZjAwMDAwMDAwZmZmZmZmMDAwMDAwMDAwMDAwZmYwZjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwZmZmZmZmMDAwMDAwMDBmMGY4ZWVlZWZmMDAwMDAwOGY4OGVmZWVmZTBmMDAwMGVmZWVmZWVmZWUwZjAwZjA4ZTg4ZThmZWZmMGYwMGYwZThmZmZmODhlODBmMDBmMGZmZWVmZWZmZmZmZjAwZjBlZTQ0YmY0ZWU0ZmYwMDAwZWZkZDFmZDRlNGZlMDAwMGYwZGRkZGU0ZWUwZjAwMDBmMDRlNDRkZTRkMDAwMDAwZjA4ODg4ZGVlZDAwMDAwMGZmMjI0NGVmZmUwMDAwMDBmZmZmZmZmZmZmMDAwMDAwZjBmZjAwZjAwZjAwMDA=",
+        "displayName": "NgadiniLeft"
+    },
+    "*": {
+        "mimeType": "image/x-mkcd-f4",
+        "dataEncoding": "base64",
+        "namespace": "myImages"
+    }
+}
