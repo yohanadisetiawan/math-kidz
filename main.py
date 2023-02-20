@@ -319,7 +319,7 @@ def doMusic(_level2: number):
                 Kebunku
             """)),
             music.PlaybackMode.LOOPING_IN_BACKGROUND)
-    elif _level2 == 2:
+    elif _level2 == 3:
         music.play(music.create_song(assets.song("""
                 Kebunku0
             """)),
@@ -354,6 +354,14 @@ def on_on_overlap2(sprite2, otherSprite2):
         game.set_game_over_message(True, "GAME OVER!")
         game.game_over(True)
 sprites.on_overlap(SpriteKind.player, SpriteKind.food, on_on_overlap2)
+
+def on_on_score():
+    global FinalNPC
+    sprites.destroy(FinalNPC)
+    FinalNPC = sprites.create(assets.image("""
+        YohanNPC
+    """), SpriteKind.food)
+info.on_score(70, on_on_score)
 
 def initLevel(_level22: number):
     if _level22 == 1:
@@ -398,15 +406,15 @@ def on_forever():
 forever(on_forever)
 
 def on_update_interval():
-    global FinalNPC
-    if info.score() > 70:
-        FinalNPC = sprites.create(assets.image("""
-            YohanNPC
-        """), SpriteKind.food)
+    global isLevel
+    if Dzakir.overlaps_with(FinalNPC):
+        isLevel += 1
         if isLevel == 3:
             tiles.place_on_random_tile(FinalNPC, sprites.dungeon.stair_ladder)
-        else:
+        elif isLevel == 1 or isLevel == 2:
             tiles.place_on_random_tile(FinalNPC, sprites.dungeon.chest_closed)
+        else:
+            game.game_over(True)
     if info.countdown() > 10 and info.countdown() < 20:
         Dzakir.say_text("Hurry up, time is be up!", 500, False)
 game.on_update_interval(500, on_update_interval)

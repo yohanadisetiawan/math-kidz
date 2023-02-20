@@ -316,7 +316,7 @@ function doMusic(_level2: number) {
         music.play(music.createSong(assets.song`
                 Kebunku
             `), music.PlaybackMode.LoopingInBackground)
-    } else if (_level2 == 2) {
+    } else if (_level2 == 3) {
         music.play(music.createSong(assets.song`
                 Kebunku0
             `), music.PlaybackMode.LoopingInBackground)
@@ -351,6 +351,13 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function on_on_overlap2(sp
         game.gameOver(true)
     }
     
+})
+info.onScore(70, function on_on_score() {
+    
+    sprites.destroy(FinalNPC)
+    FinalNPC = sprites.create(assets.image`
+        YohanNPC
+    `, SpriteKind.Food)
 })
 function initLevel(_level22: number) {
     if (_level22 == 1) {
@@ -400,14 +407,14 @@ forever(function on_forever() {
 })
 game.onUpdateInterval(500, function on_update_interval() {
     
-    if (info.score() > 70) {
-        FinalNPC = sprites.create(assets.image`
-            YohanNPC
-        `, SpriteKind.Food)
+    if (Dzakir.overlapsWith(FinalNPC)) {
+        isLevel += 1
         if (isLevel == 3) {
             tiles.placeOnRandomTile(FinalNPC, sprites.dungeon.stairLadder)
-        } else {
+        } else if (isLevel == 1 || isLevel == 2) {
             tiles.placeOnRandomTile(FinalNPC, sprites.dungeon.chestClosed)
+        } else {
+            game.gameOver(true)
         }
         
     }
