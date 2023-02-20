@@ -23,7 +23,7 @@ def on_left_pressed():
 controller.left.on_event(ControllerButtonEvent.PRESSED, on_left_pressed)
 
 def doQuiz(_level: number, _sprite: Sprite):
-    global result, ask1, ask2, posQuiz, NPC1, NPC2
+    global result, ask1, ask2, posQuiz, NPC1, NPC2, isMenu
     if _level == 1:
         result = 0
         ask1 = randint(0, 9)
@@ -43,6 +43,7 @@ def doQuiz(_level: number, _sprite: Sprite):
             DialogLayout.TOP)
         story.show_player_choices(convert_to_text(result),
             convert_to_text(result + randint(1, 4)))
+        pause(100)
         posQuiz += 1
     else:
         result = ask1 - ask2
@@ -56,6 +57,7 @@ def doQuiz(_level: number, _sprite: Sprite):
             DialogLayout.TOP)
         story.show_player_choices(convert_to_text(result),
             convert_to_text(result - randint(1, 3)))
+        pause(100)
         posQuiz = 1
     if story.check_last_answer(convert_to_text(result)):
         info.change_score_by(10)
@@ -65,14 +67,15 @@ def doQuiz(_level: number, _sprite: Sprite):
         sprites.destroy(NPC1, effects.spray, 100)
         NPC1 = sprites.create(assets.image("""
             NovitaNPC
-        """), SpriteKind.player)
+        """), SpriteKind.NPC)
         tiles.place_on_random_tile(NPC1, sprites.dungeon.collectible_blue_crystal)
     else:
         sprites.destroy(NPC2, effects.smiles, 100)
         NPC2 = sprites.create(assets.image("""
             EndangNPC
-        """), SpriteKind.player)
+        """), SpriteKind.NPC)
         tiles.place_on_random_tile(NPC2, sprites.dungeon.collectible_red_crystal)
+    isMenu = False
 
 def on_right_pressed():
     animation.run_image_animation(Dzakir,
@@ -330,6 +333,7 @@ def on_on_overlap2(sprite2, otherSprite2):
                 00780004080200
             """)),
             music.PlaybackMode.UNTIL_DONE)
+        pause(100)
         initLevel(isLevel)
     elif isLevel == 3:
         game.set_game_over_message(True, "GAME OVER!")

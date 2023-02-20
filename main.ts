@@ -42,6 +42,7 @@ function doQuiz(_level: number, _sprite: Sprite) {
         result = ask1 + ask2
         game.showLongText("Calculated:\\n" + convertToText(ask1) + "+" + convertToText(ask2), DialogLayout.Top)
         story.showPlayerChoices(convertToText(result), convertToText(result + randint(1, 4)))
+        pause(100)
         posQuiz += 1
     } else {
         result = ask1 - ask2
@@ -53,6 +54,7 @@ function doQuiz(_level: number, _sprite: Sprite) {
         
         game.showLongText("Calculated:\\n" + convertToText(ask1) + "-" + convertToText(ask2), DialogLayout.Top)
         story.showPlayerChoices(convertToText(result), convertToText(result - randint(1, 3)))
+        pause(100)
         posQuiz = 1
     }
     
@@ -66,16 +68,17 @@ function doQuiz(_level: number, _sprite: Sprite) {
         sprites.destroy(NPC1, effects.spray, 100)
         NPC1 = sprites.create(assets.image`
             NovitaNPC
-        `, SpriteKind.Player)
+        `, SpriteKind.NPC)
         tiles.placeOnRandomTile(NPC1, sprites.dungeon.collectibleBlueCrystal)
     } else {
         sprites.destroy(NPC2, effects.smiles, 100)
         NPC2 = sprites.create(assets.image`
             EndangNPC
-        `, SpriteKind.Player)
+        `, SpriteKind.NPC)
         tiles.placeOnRandomTile(NPC2, sprites.dungeon.collectibleRedCrystal)
     }
     
+    isMenu = false
 }
 
 controller.right.onEvent(ControllerButtonEvent.Pressed, function on_right_pressed() {
@@ -327,6 +330,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function on_on_overlap2(sp
         music.play(music.createSong(hex`
                 00780004080200
             `), music.PlaybackMode.UntilDone)
+        pause(100)
         initLevel(isLevel)
     } else if (isLevel == 3) {
         game.setGameOverMessage(true, "GAME OVER!")
