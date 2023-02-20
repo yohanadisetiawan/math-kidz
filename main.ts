@@ -293,6 +293,9 @@ function initGame() {
     posQuiz = 0
     isLevel = 1
     listTime = [120, 240, 360]
+    FinalNPC = sprites.create(assets.image`
+        PradityaNPC
+    `, SpriteKind.Food)
     Dzakir = sprites.create(assets.image`
         Ngadini
     `, SpriteKind.Player)
@@ -356,7 +359,7 @@ info.onScore(70, function on_on_score() {
     
     sprites.destroy(FinalNPC)
     FinalNPC = sprites.create(assets.image`
-        YohanNPC
+        PradityaNPC
     `, SpriteKind.Food)
 })
 function initLevel(_level22: number) {
@@ -408,11 +411,11 @@ forever(function on_forever() {
 game.onUpdateInterval(500, function on_update_interval() {
     
     if (Dzakir.overlapsWith(FinalNPC)) {
-        isLevel += 1
         if (isLevel == 3) {
             tiles.placeOnRandomTile(FinalNPC, sprites.dungeon.stairLadder)
         } else if (isLevel == 1 || isLevel == 2) {
             tiles.placeOnRandomTile(FinalNPC, sprites.dungeon.chestClosed)
+            isLevel += 1
         } else {
             game.gameOver(true)
         }

@@ -160,7 +160,7 @@ def on_right_pressed():
 controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
 
 def initGame():
-    global isMenu, posQuiz, isLevel, listTime, Dzakir, NPC1, NPC2
+    global isMenu, posQuiz, isLevel, listTime, FinalNPC, Dzakir, NPC1, NPC2
     scene.set_background_image(img("""
         ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
                 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -296,6 +296,9 @@ def initGame():
     posQuiz = 0
     isLevel = 1
     listTime = [120, 240, 360]
+    FinalNPC = sprites.create(assets.image("""
+        PradityaNPC
+    """), SpriteKind.food)
     Dzakir = sprites.create(assets.image("""
         Ngadini
     """), SpriteKind.player)
@@ -359,7 +362,7 @@ def on_on_score():
     global FinalNPC
     sprites.destroy(FinalNPC)
     FinalNPC = sprites.create(assets.image("""
-        YohanNPC
+        PradityaNPC
     """), SpriteKind.food)
 info.on_score(70, on_on_score)
 
@@ -408,11 +411,11 @@ forever(on_forever)
 def on_update_interval():
     global isLevel
     if Dzakir.overlaps_with(FinalNPC):
-        isLevel += 1
         if isLevel == 3:
             tiles.place_on_random_tile(FinalNPC, sprites.dungeon.stair_ladder)
         elif isLevel == 1 or isLevel == 2:
             tiles.place_on_random_tile(FinalNPC, sprites.dungeon.chest_closed)
+            isLevel += 1
         else:
             game.game_over(True)
     if info.countdown() > 10 and info.countdown() < 20:

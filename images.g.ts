@@ -112,7 +112,7 @@ f b b f f f e e e e f f f b b f
 . . . . . f f b b f f . . . . . 
 `;
             case "image5":
-            case "YohanNPC":return img`
+            case "PradityaNPC":return img`
 . . . . . . . c c c . . . . . . 
 . . . . . . c b 5 c . . . . . . 
 . . . . c c c 5 5 c c c . . . . 
