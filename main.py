@@ -3,28 +3,18 @@ class SpriteKind:
     NPC = SpriteKind.create()
 
 def on_up_pressed():
-    animation.run_image_animation(Dzakir,
-        [img("""
-            . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . .
-        """)],
-        500,
-        True)
+    animation.run_image_animation(Dzakir, assets.animation("""
+        NgadiniUp
+    """), 500, True)
 controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
+
+def on_on_overlap(sprite, otherSprite):
+    global isMenu
+    isMenu = True
+    pause(100)
+    if isMenu == True:
+        doQuiz(isLevel, otherSprite)
+sprites.on_overlap(SpriteKind.player, SpriteKind.NPC, on_on_overlap)
 
 def on_left_pressed():
     animation.run_image_animation(Dzakir, assets.animation("""
@@ -32,41 +22,58 @@ def on_left_pressed():
     """), 500, True)
 controller.left.on_event(ControllerButtonEvent.PRESSED, on_left_pressed)
 
-def doQuiz(_level: number):
+def doQuiz(_level: number, _NPC: Sprite):
     global result, ask1, ask2, posQuiz
     if _level == 1:
         result = 0
-        if story.is_menu_open():
-            ask1 = randint(0, 9)
-            ask2 = randint(0, 9)
-            if posQuiz % 2 == 1:
-                result = ask1 + ask2
-                game.show_long_text("Calculated:\\n" + convert_to_text(ask1) + "+" + convert_to_text(ask2),
-                    DialogLayout.TOP)
-                story.show_player_choices(convert_to_text(result),
-                    convert_to_text(result + randint(1, 4)))
-                posQuiz += 1
-            else:
-                result = ask1 - ask2
-                if result < 0:
-                    result = ask2 - ask1
-                    game.show_long_text("Calculated:\\n" + convert_to_text(ask2) + "-" + convert_to_text(ask1),
-                        DialogLayout.TOP)
-                    story.show_player_choices(convert_to_text(result),
-                        convert_to_text(result - randint(1, 3)))
-                game.show_long_text("Calculated:\\n" + convert_to_text(ask1) + "-" + convert_to_text(ask2),
-                    DialogLayout.TOP)
-                story.show_player_choices(convert_to_text(result),
-                    convert_to_text(result - randint(1, 3)))
-                posQuiz = 1
-            if result == int(story.get_last_answer()):
-                info.change_score_by(10)
-            else:
-                info.change_score_by(-5)
+        if convert_to_text(_NPC) == "NPC1":
+            ask1 = randint(0, 5)
+            ask2 = randint(0, 5)
+        else:
+            ask1 = randint(4, 9)
+            ask2 = randint(4, 9)
     elif _level == 2:
-        pass
+        result = 0
+        if convert_to_text(_NPC) == "NPC1":
+            ask1 = randint(15, 75)
+            ask2 = randint(10, 70)
+        else:
+            ask1 = randint(20, 99)
+            ask2 = randint(15, 99)
     else:
-        pass
+        result = 0
+        if convert_to_text(_NPC) == "NPC1":
+            ask1 = randint(100, 800)
+            ask2 = randint(100, 850)
+        else:
+            ask1 = randint(200, 999)
+            ask2 = randint(150, 900)
+    pause(100)
+    if story.is_menu_open():
+        if posQuiz % 2 == 1:
+            result = ask1 + ask2
+            game.show_long_text("Calculated:\\n" + convert_to_text(ask1) + "+" + convert_to_text(ask2),
+                DialogLayout.TOP)
+            story.show_player_choices(convert_to_text(result),
+                convert_to_text(result + randint(1, 4)))
+            posQuiz += 1
+        else:
+            result = ask1 - ask2
+            if result < 0:
+                result = ask2 - ask1
+                game.show_long_text("Calculated:\\n" + convert_to_text(ask2) + "-" + convert_to_text(ask1),
+                    DialogLayout.TOP)
+                story.show_player_choices(convert_to_text(result - randint(1, 3)),
+                    convert_to_text(result))
+            game.show_long_text("Calculated:\\n" + convert_to_text(ask1) + "-" + convert_to_text(ask2),
+                DialogLayout.TOP)
+            story.show_player_choices(convert_to_text(result),
+                convert_to_text(result - randint(1, 3)))
+            posQuiz = 1
+        if result == int(story.get_last_answer()):
+            info.change_score_by(10)
+        else:
+            info.change_score_by(-5)
 
 def on_right_pressed():
     animation.run_image_animation(Dzakir,
@@ -143,11 +150,11 @@ def on_right_pressed():
                         . . . . . f f . . . f f f . . .
             """)],
         500,
-        False)
+        True)
 controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
 
 def initGame():
-    global isMenu, Dzakir, posQuiz, NPC1, NPC2
+    global isMenu, Dzakir, posQuiz, NPC1, NPC2, isLevel
     scene.set_background_image(img("""
         ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
                 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -279,7 +286,6 @@ def initGame():
     """), SpriteKind.player)
     scene.camera_follow_sprite(Dzakir)
     tiles.place_on_random_tile(Dzakir, sprites.dungeon.collectible_insignia)
-    controller.move_sprite(Dzakir)
     posQuiz = 0
     info.set_score(0)
     NPC1 = sprites.create(assets.image("""
@@ -290,57 +296,97 @@ def initGame():
         EndangNPC
     """), SpriteKind.NPC)
     tiles.place_on_random_tile(NPC2, sprites.dungeon.collectible_red_crystal)
-
-def on_down_pressed():
-    animation.run_image_animation(Dzakir,
-        [img("""
-            . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . .
-        """)],
-        500,
-        True)
-controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
-
-def initLevel(_level2: number):
+    game.set_game_over_scoring_type(game.ScoringType.HIGH_SCORE)
+    isLevel = 1
+def doMusic(_level2: number):
+    music.stop_all_sounds()
     if _level2 == 1:
         music.play(music.create_song(hex("""
                 00780004080200
             """)),
             music.PlaybackMode.LOOPING_IN_BACKGROUND)
+    elif _level2 == 2:
+        music.play(music.create_song(hex("""
+                00780004080200
+            """)),
+            music.PlaybackMode.LOOPING_IN_BACKGROUND)
+    else:
+        music.play(music.create_song(hex("""
+                00780004080200
+            """)),
+            music.PlaybackMode.LOOPING_IN_BACKGROUND)
+
+def on_down_pressed():
+    animation.run_image_animation(Dzakir, assets.animation("""
+        NgadiniDown
+    """), 500, True)
+controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
+
+def on_on_overlap2(sprite2, otherSprite2):
+    global isLevel
+    if isLevel == 1 or isLevel == 1:
+        isLevel += 1
+        music.stop_all_sounds()
+        music.play(music.create_song(hex("""
+                00780004080200
+            """)),
+            music.PlaybackMode.UNTIL_DONE)
+        initLevel(isLevel)
+    elif isLevel == 3:
+        game.set_game_over_message(True, "GAME OVER!")
+        game.game_over(True)
+sprites.on_overlap(SpriteKind.player, SpriteKind.food, on_on_overlap2)
+
+def initLevel(_level22: number):
+    if _level22 == 1:
+        doMusic(_level22)
         tiles.set_current_tilemap(tilemap("""
             level1
         """))
         info.start_countdown(120)
-    elif _level2 == 2:
-        info.start_countdown(90)
+    elif _level22 == 2:
+        doMusic(_level22)
+        tiles.set_current_tilemap(tilemap("""
+            level2
+        """))
+        info.start_countdown(180)
     else:
-        info.start_countdown(60)
-    doQuiz(_level2)
+        doMusic(_level22)
+        tiles.set_current_tilemap(tilemap("""
+            level3
+        """))
+        info.start_countdown(240)
+FinalNPC: Sprite = None
 NPC2: Sprite = None
 NPC1: Sprite = None
-isMenu = False
 posQuiz = 0
 ask2 = 0
 ask1 = 0
 result = 0
+isLevel = 0
+isMenu = False
 Dzakir: Sprite = None
 initLevel(1)
 initGame()
 
 def on_forever():
-    pass
+    if isMenu == True:
+        controller.move_sprite(Dzakir, 0, 0)
+        animation.stop_animation(animation.AnimationTypes.ALL, Dzakir)
+    else:
+        controller.move_sprite(Dzakir)
 forever(on_forever)
+
+def on_update_interval():
+    global FinalNPC
+    if info.score() > 70:
+        FinalNPC = sprites.create(assets.image("""
+            YohanNPC
+        """), SpriteKind.food)
+        if isLevel == 3:
+            tiles.place_on_random_tile(FinalNPC, sprites.dungeon.stair_ladder)
+        else:
+            tiles.place_on_random_tile(FinalNPC, sprites.dungeon.chest_closed)
+    if info.countdown() > 10 and info.countdown() < 20:
+        Dzakir.say_text("Hurry up, time is be up!", 500, False)
+game.on_update_interval(500, on_update_interval)

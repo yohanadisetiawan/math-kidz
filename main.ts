@@ -3,66 +3,83 @@ namespace SpriteKind {
 }
 
 controller.up.onEvent(ControllerButtonEvent.Pressed, function on_up_pressed() {
-    animation.runImageAnimation(Dzakir, [img`
-            . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . .
-        `], 500, true)
+    animation.runImageAnimation(Dzakir, assets.animation`
+        NgadiniUp
+    `, 500, true)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC, function on_on_overlap(sprite: Sprite, otherSprite: Sprite) {
+    
+    isMenu = true
+    pause(100)
+    if (isMenu == true) {
+        doQuiz(isLevel, otherSprite)
+    }
+    
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function on_left_pressed() {
     animation.runImageAnimation(Dzakir, assets.animation`
         NgadiniLeft
     `, 500, true)
 })
-function doQuiz(_level: number) {
+function doQuiz(_level: number, _NPC: Sprite) {
     
     if (_level == 1) {
         result = 0
-        if (story.isMenuOpen()) {
-            ask1 = randint(0, 9)
-            ask2 = randint(0, 9)
-            if (posQuiz % 2 == 1) {
-                result = ask1 + ask2
-                game.showLongText("Calculated:\\n" + convertToText(ask1) + "+" + convertToText(ask2), DialogLayout.Top)
-                story.showPlayerChoices(convertToText(result), convertToText(result + randint(1, 4)))
-                posQuiz += 1
-            } else {
-                result = ask1 - ask2
-                if (result < 0) {
-                    result = ask2 - ask1
-                    game.showLongText("Calculated:\\n" + convertToText(ask2) + "-" + convertToText(ask1), DialogLayout.Top)
-                    story.showPlayerChoices(convertToText(result), convertToText(result - randint(1, 3)))
-                }
-                
-                game.showLongText("Calculated:\\n" + convertToText(ask1) + "-" + convertToText(ask2), DialogLayout.Top)
-                story.showPlayerChoices(convertToText(result), convertToText(result - randint(1, 3)))
-                posQuiz = 1
-            }
-            
-            if (result == parseInt(story.getLastAnswer())) {
-                info.changeScoreBy(10)
-            } else {
-                info.changeScoreBy(-5)
-            }
-            
+        if (convertToText(_NPC) == "NPC1") {
+            ask1 = randint(0, 5)
+            ask2 = randint(0, 5)
+        } else {
+            ask1 = randint(4, 9)
+            ask2 = randint(4, 9)
         }
         
     } else if (_level == 2) {
+        result = 0
+        if (convertToText(_NPC) == "NPC1") {
+            ask1 = randint(15, 75)
+            ask2 = randint(10, 70)
+        } else {
+            ask1 = randint(20, 99)
+            ask2 = randint(15, 99)
+        }
         
     } else {
+        result = 0
+        if (convertToText(_NPC) == "NPC1") {
+            ask1 = randint(100, 800)
+            ask2 = randint(100, 850)
+        } else {
+            ask1 = randint(200, 999)
+            ask2 = randint(150, 900)
+        }
+        
+    }
+    
+    pause(100)
+    if (story.isMenuOpen()) {
+        if (posQuiz % 2 == 1) {
+            result = ask1 + ask2
+            game.showLongText("Calculated:\\n" + convertToText(ask1) + "+" + convertToText(ask2), DialogLayout.Top)
+            story.showPlayerChoices(convertToText(result), convertToText(result + randint(1, 4)))
+            posQuiz += 1
+        } else {
+            result = ask1 - ask2
+            if (result < 0) {
+                result = ask2 - ask1
+                game.showLongText("Calculated:\\n" + convertToText(ask2) + "-" + convertToText(ask1), DialogLayout.Top)
+                story.showPlayerChoices(convertToText(result - randint(1, 3)), convertToText(result))
+            }
+            
+            game.showLongText("Calculated:\\n" + convertToText(ask1) + "-" + convertToText(ask2), DialogLayout.Top)
+            story.showPlayerChoices(convertToText(result), convertToText(result - randint(1, 3)))
+            posQuiz = 1
+        }
+        
+        if (result == parseInt(story.getLastAnswer())) {
+            info.changeScoreBy(10)
+        } else {
+            info.changeScoreBy(-5)
+        }
         
     }
     
@@ -137,7 +154,7 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function on_right_presse
                         . . . . f e e f 4 4 2 2 f f . . 
                         . . . . f f f f f f f f f f . . 
                         . . . . . f f . . . f f f . . .
-            `], 500, false)
+            `], 500, true)
 })
 function initGame() {
     
@@ -272,7 +289,6 @@ function initGame() {
     `, SpriteKind.Player)
     scene.cameraFollowSprite(Dzakir)
     tiles.placeOnRandomTile(Dzakir, sprites.dungeon.collectibleInsignia)
-    controller.moveSprite(Dzakir)
     posQuiz = 0
     info.setScore(0)
     NPC1 = sprites.create(assets.image`
@@ -283,56 +299,108 @@ function initGame() {
         EndangNPC
     `, SpriteKind.NPC)
     tiles.placeOnRandomTile(NPC2, sprites.dungeon.collectibleRedCrystal)
+    game.setGameOverScoringType(game.ScoringType.HighScore)
+    isLevel = 1
 }
 
-controller.down.onEvent(ControllerButtonEvent.Pressed, function on_down_pressed() {
-    animation.runImageAnimation(Dzakir, [img`
-            . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . .
-        `], 500, true)
-})
-function initLevel(_level2: number) {
+function doMusic(_level2: number) {
+    music.stopAllSounds()
     if (_level2 == 1) {
         music.play(music.createSong(hex`
                 00780004080200
             `), music.PlaybackMode.LoopingInBackground)
+    } else if (_level2 == 2) {
+        music.play(music.createSong(hex`
+                00780004080200
+            `), music.PlaybackMode.LoopingInBackground)
+    } else {
+        music.play(music.createSong(hex`
+                00780004080200
+            `), music.PlaybackMode.LoopingInBackground)
+    }
+    
+}
+
+controller.down.onEvent(ControllerButtonEvent.Pressed, function on_down_pressed() {
+    animation.runImageAnimation(Dzakir, assets.animation`
+        NgadiniDown
+    `, 500, true)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function on_on_overlap2(sprite2: Sprite, otherSprite2: Sprite) {
+    
+    if (isLevel == 1 || isLevel == 1) {
+        isLevel += 1
+        music.stopAllSounds()
+        music.play(music.createSong(hex`
+                00780004080200
+            `), music.PlaybackMode.UntilDone)
+        initLevel(isLevel)
+    } else if (isLevel == 3) {
+        game.setGameOverMessage(true, "GAME OVER!")
+        game.gameOver(true)
+    }
+    
+})
+function initLevel(_level22: number) {
+    if (_level22 == 1) {
+        doMusic(_level22)
         tiles.setCurrentTilemap(tilemap`
             level1
         `)
         info.startCountdown(120)
-    } else if (_level2 == 2) {
-        info.startCountdown(90)
+    } else if (_level22 == 2) {
+        doMusic(_level22)
+        tiles.setCurrentTilemap(tilemap`
+            level2
+        `)
+        info.startCountdown(180)
     } else {
-        info.startCountdown(60)
+        doMusic(_level22)
+        tiles.setCurrentTilemap(tilemap`
+            level3
+        `)
+        info.startCountdown(240)
     }
     
-    doQuiz(_level2)
 }
 
+let FinalNPC : Sprite = null
 let NPC2 : Sprite = null
 let NPC1 : Sprite = null
-let isMenu = false
 let posQuiz = 0
 let ask2 = 0
 let ask1 = 0
 let result = 0
+let isLevel = 0
+let isMenu = false
 let Dzakir : Sprite = null
 initLevel(1)
 initGame()
 forever(function on_forever() {
+    if (isMenu == true) {
+        controller.moveSprite(Dzakir, 0, 0)
+        animation.stopAnimation(animation.AnimationTypes.All, Dzakir)
+    } else {
+        controller.moveSprite(Dzakir)
+    }
+    
+})
+game.onUpdateInterval(500, function on_update_interval() {
+    
+    if (info.score() > 70) {
+        FinalNPC = sprites.create(assets.image`
+            YohanNPC
+        `, SpriteKind.Food)
+        if (isLevel == 3) {
+            tiles.placeOnRandomTile(FinalNPC, sprites.dungeon.stairLadder)
+        } else {
+            tiles.placeOnRandomTile(FinalNPC, sprites.dungeon.chestClosed)
+        }
+        
+    }
+    
+    if (info.countdown() > 10 && info.countdown() < 20) {
+        Dzakir.sayText("Hurry up, time is be up!", 500, false)
+    }
     
 })
