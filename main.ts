@@ -38,47 +38,50 @@ function doQuiz(_level: number, _sprite: Sprite) {
     }
     
     pause(100)
-    if (posQuiz % 2 == 1) {
-        result = ask1 + ask2
-        game.showLongText("Calculated:\\n" + convertToText(ask1) + "+" + convertToText(ask2), DialogLayout.Top)
-        story.showPlayerChoices(convertToText(result), convertToText(result + randint(1, 4)))
-        pause(100)
-        posQuiz += 1
-    } else {
-        result = ask1 - ask2
-        if (result < 0) {
-            result = ask2 - ask1
-            game.showLongText("Calculated:\\n" + convertToText(ask2) + "-" + convertToText(ask1), DialogLayout.Top)
-            story.showPlayerChoices(convertToText(result - randint(1, 3)), convertToText(result))
+    if (isMenu == true) {
+        if (posQuiz % 2 == 1) {
+            result = ask1 + ask2
+            game.showLongText("Calculated:\\n" + convertToText(ask1) + " + " + convertToText(ask2), DialogLayout.Top)
+            story.showPlayerChoices(convertToText(result), convertToText(result + randint(1, 4)))
+            pause(100)
+            posQuiz += 1
+        } else {
+            result = ask1 - ask2
+            if (result < 0) {
+                result = ask2 - ask1
+                game.showLongText("Calculated:\\n" + convertToText(ask2) + " - " + convertToText(ask1), DialogLayout.Top)
+                story.showPlayerChoices(convertToText(result - randint(1, 3)), convertToText(result))
+            }
+            
+            game.showLongText("Calculated:\\n" + convertToText(ask1) + " - " + convertToText(ask2), DialogLayout.Top)
+            story.showPlayerChoices(convertToText(result), convertToText(result - randint(1, 3)))
+            pause(100)
+            posQuiz = 1
         }
         
-        game.showLongText("Calculated:\\n" + convertToText(ask1) + "-" + convertToText(ask2), DialogLayout.Top)
-        story.showPlayerChoices(convertToText(result), convertToText(result - randint(1, 3)))
-        pause(100)
-        posQuiz = 1
+        if (story.checkLastAnswer(convertToText(result))) {
+            info.changeScoreBy(10)
+        } else {
+            info.changeScoreBy(-5)
+        }
+        
+        if (_sprite == NPC1) {
+            sprites.destroy(NPC1, effects.spray, 100)
+            NPC1 = sprites.create(assets.image`
+                NovitaNPC
+            `, SpriteKind.NPC)
+            tiles.placeOnRandomTile(NPC1, sprites.dungeon.collectibleBlueCrystal)
+        } else {
+            sprites.destroy(NPC2, effects.smiles, 100)
+            NPC2 = sprites.create(assets.image`
+                EndangNPC
+            `, SpriteKind.NPC)
+            tiles.placeOnRandomTile(NPC2, sprites.dungeon.collectibleRedCrystal)
+        }
+        
+        isMenu = false
     }
     
-    if (story.checkLastAnswer(convertToText(result))) {
-        info.changeScoreBy(10)
-    } else {
-        info.changeScoreBy(-5)
-    }
-    
-    if (_sprite == NPC1) {
-        sprites.destroy(NPC1, effects.spray, 100)
-        NPC1 = sprites.create(assets.image`
-            NovitaNPC
-        `, SpriteKind.NPC)
-        tiles.placeOnRandomTile(NPC1, sprites.dungeon.collectibleBlueCrystal)
-    } else {
-        sprites.destroy(NPC2, effects.smiles, 100)
-        NPC2 = sprites.create(assets.image`
-            EndangNPC
-        `, SpriteKind.NPC)
-        tiles.placeOnRandomTile(NPC2, sprites.dungeon.collectibleRedCrystal)
-    }
-    
-    isMenu = false
 }
 
 controller.right.onEvent(ControllerButtonEvent.Pressed, function on_right_pressed() {
@@ -280,23 +283,20 @@ function initGame() {
         frameDialog
     `)
     isMenu = false
+    posQuiz = 0
+    isLevel = 1
+    listTime = [120, 240, 360]
     Dzakir = sprites.create(assets.image`
         Ngadini
     `, SpriteKind.Player)
-    scene.cameraFollowSprite(Dzakir)
-    tiles.placeOnRandomTile(Dzakir, sprites.dungeon.collectibleInsignia)
-    posQuiz = 0
-    info.setScore(0)
     NPC1 = sprites.create(assets.image`
         NovitaNPC
     `, SpriteKind.NPC)
-    tiles.placeOnRandomTile(NPC1, sprites.dungeon.collectibleBlueCrystal)
     NPC2 = sprites.create(assets.image`
         EndangNPC
     `, SpriteKind.NPC)
-    tiles.placeOnRandomTile(NPC2, sprites.dungeon.collectibleRedCrystal)
     game.setGameOverScoringType(game.ScoringType.HighScore)
-    isLevel = 1
+    info.setScore(0)
 }
 
 function doMusic(_level2: number) {
@@ -340,39 +340,41 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function on_on_overlap2(sp
 })
 function initLevel(_level22: number) {
     if (_level22 == 1) {
-        doMusic(_level22)
         tiles.setCurrentTilemap(tilemap`
             level1
         `)
-        info.startCountdown(120)
     } else if (_level22 == 2) {
-        doMusic(_level22)
         tiles.setCurrentTilemap(tilemap`
             level2
         `)
-        info.startCountdown(180)
     } else {
-        doMusic(_level22)
         tiles.setCurrentTilemap(tilemap`
             level3
         `)
-        info.startCountdown(240)
     }
     
+    tiles.placeOnRandomTile(Dzakir, sprites.dungeon.collectibleInsignia)
+    tiles.placeOnRandomTile(NPC1, sprites.dungeon.collectibleBlueCrystal)
+    tiles.placeOnRandomTile(NPC2, sprites.dungeon.collectibleRedCrystal)
+    scene.cameraFollowSprite(Dzakir)
+    info.startCountdown(listTime[_level22 - 1])
+    doMusic(_level22)
 }
 
 let FinalNPC : Sprite = null
+let listTime : number[] = []
 let NPC2 : Sprite = null
 let NPC1 : Sprite = null
 let posQuiz = 0
 let ask2 = 0
 let ask1 = 0
 let result = 0
-let isLevel = 0
 let isMenu = false
 let Dzakir : Sprite = null
-initLevel(1)
+let isLevel = 0
 initGame()
+pause(100)
+initLevel(isLevel)
 forever(function on_forever() {
     if (isMenu == true) {
         controller.moveSprite(Dzakir, 0, 0)

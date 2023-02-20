@@ -37,45 +37,46 @@ def doQuiz(_level: number, _sprite: Sprite):
         ask1 = randint(100, 999)
         ask2 = randint(100, 999)
     pause(100)
-    if posQuiz % 2 == 1:
-        result = ask1 + ask2
-        game.show_long_text("Calculated:\\n" + convert_to_text(ask1) + "+" + convert_to_text(ask2),
-            DialogLayout.TOP)
-        story.show_player_choices(convert_to_text(result),
-            convert_to_text(result + randint(1, 4)))
-        pause(100)
-        posQuiz += 1
-    else:
-        result = ask1 - ask2
-        if result < 0:
-            result = ask2 - ask1
-            game.show_long_text("Calculated:\\n" + convert_to_text(ask2) + "-" + convert_to_text(ask1),
+    if isMenu == True:
+        if posQuiz % 2 == 1:
+            result = ask1 + ask2
+            game.show_long_text("Calculated:\\n" + convert_to_text(ask1) + " + " + convert_to_text(ask2),
                 DialogLayout.TOP)
-            story.show_player_choices(convert_to_text(result - randint(1, 3)),
-                convert_to_text(result))
-        game.show_long_text("Calculated:\\n" + convert_to_text(ask1) + "-" + convert_to_text(ask2),
-            DialogLayout.TOP)
-        story.show_player_choices(convert_to_text(result),
-            convert_to_text(result - randint(1, 3)))
-        pause(100)
-        posQuiz = 1
-    if story.check_last_answer(convert_to_text(result)):
-        info.change_score_by(10)
-    else:
-        info.change_score_by(-5)
-    if _sprite == NPC1:
-        sprites.destroy(NPC1, effects.spray, 100)
-        NPC1 = sprites.create(assets.image("""
-            NovitaNPC
-        """), SpriteKind.NPC)
-        tiles.place_on_random_tile(NPC1, sprites.dungeon.collectible_blue_crystal)
-    else:
-        sprites.destroy(NPC2, effects.smiles, 100)
-        NPC2 = sprites.create(assets.image("""
-            EndangNPC
-        """), SpriteKind.NPC)
-        tiles.place_on_random_tile(NPC2, sprites.dungeon.collectible_red_crystal)
-    isMenu = False
+            story.show_player_choices(convert_to_text(result),
+                convert_to_text(result + randint(1, 4)))
+            pause(100)
+            posQuiz += 1
+        else:
+            result = ask1 - ask2
+            if result < 0:
+                result = ask2 - ask1
+                game.show_long_text("Calculated:\\n" + convert_to_text(ask2) + " - " + convert_to_text(ask1),
+                    DialogLayout.TOP)
+                story.show_player_choices(convert_to_text(result - randint(1, 3)),
+                    convert_to_text(result))
+            game.show_long_text("Calculated:\\n" + convert_to_text(ask1) + " - " + convert_to_text(ask2),
+                DialogLayout.TOP)
+            story.show_player_choices(convert_to_text(result),
+                convert_to_text(result - randint(1, 3)))
+            pause(100)
+            posQuiz = 1
+        if story.check_last_answer(convert_to_text(result)):
+            info.change_score_by(10)
+        else:
+            info.change_score_by(-5)
+        if _sprite == NPC1:
+            sprites.destroy(NPC1, effects.spray, 100)
+            NPC1 = sprites.create(assets.image("""
+                NovitaNPC
+            """), SpriteKind.NPC)
+            tiles.place_on_random_tile(NPC1, sprites.dungeon.collectible_blue_crystal)
+        else:
+            sprites.destroy(NPC2, effects.smiles, 100)
+            NPC2 = sprites.create(assets.image("""
+                EndangNPC
+            """), SpriteKind.NPC)
+            tiles.place_on_random_tile(NPC2, sprites.dungeon.collectible_red_crystal)
+        isMenu = False
 
 def on_right_pressed():
     animation.run_image_animation(Dzakir,
@@ -156,7 +157,7 @@ def on_right_pressed():
 controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
 
 def initGame():
-    global isMenu, Dzakir, posQuiz, NPC1, NPC2, isLevel
+    global isMenu, posQuiz, isLevel, listTime, Dzakir, NPC1, NPC2
     scene.set_background_image(img("""
         ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
                 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -283,23 +284,20 @@ def initGame():
         frameDialog
     """))
     isMenu = False
+    posQuiz = 0
+    isLevel = 1
+    listTime = [120, 240, 360]
     Dzakir = sprites.create(assets.image("""
         Ngadini
     """), SpriteKind.player)
-    scene.camera_follow_sprite(Dzakir)
-    tiles.place_on_random_tile(Dzakir, sprites.dungeon.collectible_insignia)
-    posQuiz = 0
-    info.set_score(0)
     NPC1 = sprites.create(assets.image("""
         NovitaNPC
     """), SpriteKind.NPC)
-    tiles.place_on_random_tile(NPC1, sprites.dungeon.collectible_blue_crystal)
     NPC2 = sprites.create(assets.image("""
         EndangNPC
     """), SpriteKind.NPC)
-    tiles.place_on_random_tile(NPC2, sprites.dungeon.collectible_red_crystal)
     game.set_game_over_scoring_type(game.ScoringType.HIGH_SCORE)
-    isLevel = 1
+    info.set_score(0)
 def doMusic(_level2: number):
     music.stop_all_sounds()
     if _level2 == 1:
@@ -342,35 +340,37 @@ sprites.on_overlap(SpriteKind.player, SpriteKind.food, on_on_overlap2)
 
 def initLevel(_level22: number):
     if _level22 == 1:
-        doMusic(_level22)
         tiles.set_current_tilemap(tilemap("""
             level1
         """))
-        info.start_countdown(120)
     elif _level22 == 2:
-        doMusic(_level22)
         tiles.set_current_tilemap(tilemap("""
             level2
         """))
-        info.start_countdown(180)
     else:
-        doMusic(_level22)
         tiles.set_current_tilemap(tilemap("""
             level3
         """))
-        info.start_countdown(240)
+    tiles.place_on_random_tile(Dzakir, sprites.dungeon.collectible_insignia)
+    tiles.place_on_random_tile(NPC1, sprites.dungeon.collectible_blue_crystal)
+    tiles.place_on_random_tile(NPC2, sprites.dungeon.collectible_red_crystal)
+    scene.camera_follow_sprite(Dzakir)
+    info.start_countdown(listTime[_level22 - 1])
+    doMusic(_level22)
 FinalNPC: Sprite = None
+listTime: List[number] = []
 NPC2: Sprite = None
 NPC1: Sprite = None
 posQuiz = 0
 ask2 = 0
 ask1 = 0
 result = 0
-isLevel = 0
 isMenu = False
 Dzakir: Sprite = None
-initLevel(1)
+isLevel = 0
 initGame()
+pause(100)
+initLevel(isLevel)
 
 def on_forever():
     if isMenu == True:
