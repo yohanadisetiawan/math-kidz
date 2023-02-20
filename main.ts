@@ -282,6 +282,10 @@ function initGame() {
     game.setDialogFrame(assets.image`
         frameDialog
     `)
+    game.showLongText("Welcome\\nMath Kidz\\nGame!", DialogLayout.Center)
+    game.showLongText("(c) 2023 - CS50X\\nFinal Project", DialogLayout.Bottom)
+    game.showLongText("Harvard University\\nCreated by Yohan Adi Setiawan", DialogLayout.Bottom)
+    game.showLongText("Get score minimum to get next level with dialog to NPC, rember your time!", DialogLayout.Full)
     isMenu = false
     posQuiz = 0
     isLevel = 1
@@ -302,16 +306,16 @@ function initGame() {
 function doMusic(_level2: number) {
     music.stopAllSounds()
     if (_level2 == 1) {
-        music.play(music.createSong(hex`
-                00780004080200
+        music.play(music.createSong(assets.song`
+                Hujan
             `), music.PlaybackMode.LoopingInBackground)
     } else if (_level2 == 2) {
-        music.play(music.createSong(hex`
-                00780004080200
+        music.play(music.createSong(assets.song`
+                Kebunku
             `), music.PlaybackMode.LoopingInBackground)
     } else {
-        music.play(music.createSong(hex`
-                00780004080200
+        music.play(music.createSong(assets.song`
+                Kebunku0
             `), music.PlaybackMode.LoopingInBackground)
     }
     

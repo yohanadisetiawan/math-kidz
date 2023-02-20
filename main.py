@@ -283,6 +283,12 @@ def initGame():
     game.set_dialog_frame(assets.image("""
         frameDialog
     """))
+    game.show_long_text("Welcome\\nMath Kidz\\nGame!", DialogLayout.CENTER)
+    game.show_long_text("(c) 2023 - CS50X\\nFinal Project", DialogLayout.BOTTOM)
+    game.show_long_text("Harvard University\\nCreated by Yohan Adi Setiawan",
+        DialogLayout.BOTTOM)
+    game.show_long_text("Get score minimum to get next level with dialog to NPC, rember your time!",
+        DialogLayout.FULL)
     isMenu = False
     posQuiz = 0
     isLevel = 1
@@ -301,18 +307,18 @@ def initGame():
 def doMusic(_level2: number):
     music.stop_all_sounds()
     if _level2 == 1:
-        music.play(music.create_song(hex("""
-                00780004080200
+        music.play(music.create_song(assets.song("""
+                Hujan
             """)),
             music.PlaybackMode.LOOPING_IN_BACKGROUND)
     elif _level2 == 2:
-        music.play(music.create_song(hex("""
-                00780004080200
+        music.play(music.create_song(assets.song("""
+                Kebunku
             """)),
             music.PlaybackMode.LOOPING_IN_BACKGROUND)
     else:
-        music.play(music.create_song(hex("""
-                00780004080200
+        music.play(music.create_song(assets.song("""
+                Kebunku0
             """)),
             music.PlaybackMode.LOOPING_IN_BACKGROUND)
 
