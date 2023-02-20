@@ -13,6 +13,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC, function on_on_overlap(spri
     pause(100)
     if (isMenu == true) {
         doQuiz(isLevel, otherSprite)
+        isMenu = false
     }
     
 })
@@ -31,7 +32,7 @@ function doQuiz(_level: number, _sprite: Sprite) {
         result = 0
         ask1 = randint(10, 99)
         ask2 = randint(10, 99)
-    } else {
+    } else if (_level == 3) {
         result = 0
         ask1 = randint(100, 999)
         ask2 = randint(100, 999)
@@ -43,8 +44,8 @@ function doQuiz(_level: number, _sprite: Sprite) {
             result = ask1 + ask2
             game.showLongText("Calculated:\\n" + convertToText(ask1) + " + " + convertToText(ask2), DialogLayout.Top)
             story.showPlayerChoices(convertToText(result), convertToText(result + randint(1, 4)))
+            posQuiz = 2
             pause(100)
-            posQuiz += 1
         } else {
             result = ask1 - ask2
             if (result < 0) {
@@ -55,8 +56,8 @@ function doQuiz(_level: number, _sprite: Sprite) {
             
             game.showLongText("Calculated:\\n" + convertToText(ask1) + " - " + convertToText(ask2), DialogLayout.Top)
             story.showPlayerChoices(convertToText(result), convertToText(result - randint(1, 3)))
-            pause(100)
             posQuiz = 1
+            pause(100)
         }
         
         if (story.checkLastAnswer(convertToText(result))) {
@@ -65,13 +66,14 @@ function doQuiz(_level: number, _sprite: Sprite) {
             info.changeScoreBy(-5)
         }
         
+        pause(100)
         if (_sprite == NPC1) {
             sprites.destroy(NPC1, effects.spray, 100)
             NPC1 = sprites.create(assets.image`
                 NovitaNPC
             `, SpriteKind.NPC)
             tiles.placeOnRandomTile(NPC1, sprites.dungeon.collectibleBlueCrystal)
-        } else {
+        } else if (_sprite == NPC2) {
             sprites.destroy(NPC2, effects.smiles, 100)
             NPC2 = sprites.create(assets.image`
                 EndangNPC
@@ -79,6 +81,7 @@ function doQuiz(_level: number, _sprite: Sprite) {
             tiles.placeOnRandomTile(NPC2, sprites.dungeon.collectibleRedCrystal)
         }
         
+        pause(100)
         isMenu = false
     }
     
@@ -313,7 +316,7 @@ function doMusic(_level2: number) {
         music.play(music.createSong(assets.song`
                 Kebunku
             `), music.PlaybackMode.LoopingInBackground)
-    } else {
+    } else if (_level2 == 2) {
         music.play(music.createSong(assets.song`
                 Kebunku0
             `), music.PlaybackMode.LoopingInBackground)
@@ -328,15 +331,22 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function on_down_pressed(
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function on_on_overlap2(sprite2: Sprite, otherSprite2: Sprite) {
     
-    if (isLevel == 1 || isLevel == 2) {
-        isLevel += 1
+    sprites.destroy(FinalNPC, effects.hearts, 500)
+    info.setScore(0)
+    controller.moveSprite(Dzakir, 0, 0)
+    if (isLevel == 1) {
         music.stopAllSounds()
-        music.play(music.createSong(hex`
-                00780004080200
-            `), music.PlaybackMode.UntilDone)
+        music.play(music.melodyPlayable(music.magicWand), music.PlaybackMode.UntilDone)
+        isLevel = 2
         pause(100)
         initLevel(isLevel)
-    } else if (isLevel == 3) {
+    } else if (isLevel == 2) {
+        music.stopAllSounds()
+        music.play(music.melodyPlayable(music.magicWand), music.PlaybackMode.UntilDone)
+        isLevel = 3
+        pause(100)
+        initLevel(isLevel)
+    } else if (isLevel > 3) {
         game.setGameOverMessage(true, "GAME OVER!")
         game.gameOver(true)
     }
@@ -351,7 +361,7 @@ function initLevel(_level22: number) {
         tiles.setCurrentTilemap(tilemap`
             level2
         `)
-    } else {
+    } else if (_level22 == 3) {
         tiles.setCurrentTilemap(tilemap`
             level3
         `)
@@ -383,7 +393,7 @@ forever(function on_forever() {
     if (isMenu == true) {
         controller.moveSprite(Dzakir, 0, 0)
         animation.stopAnimation(animation.AnimationTypes.All, Dzakir)
-    } else {
+    } else if (isMenu == false) {
         controller.moveSprite(Dzakir, 100, 100)
     }
     

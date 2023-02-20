@@ -14,6 +14,7 @@ def on_on_overlap(sprite, otherSprite):
     pause(100)
     if isMenu == True:
         doQuiz(isLevel, otherSprite)
+        isMenu = False
 sprites.on_overlap(SpriteKind.player, SpriteKind.NPC, on_on_overlap)
 
 def on_left_pressed():
@@ -32,7 +33,7 @@ def doQuiz(_level: number, _sprite: Sprite):
         result = 0
         ask1 = randint(10, 99)
         ask2 = randint(10, 99)
-    else:
+    elif _level == 3:
         result = 0
         ask1 = randint(100, 999)
         ask2 = randint(100, 999)
@@ -44,8 +45,8 @@ def doQuiz(_level: number, _sprite: Sprite):
                 DialogLayout.TOP)
             story.show_player_choices(convert_to_text(result),
                 convert_to_text(result + randint(1, 4)))
+            posQuiz = 2
             pause(100)
-            posQuiz += 1
         else:
             result = ask1 - ask2
             if result < 0:
@@ -58,24 +59,26 @@ def doQuiz(_level: number, _sprite: Sprite):
                 DialogLayout.TOP)
             story.show_player_choices(convert_to_text(result),
                 convert_to_text(result - randint(1, 3)))
-            pause(100)
             posQuiz = 1
+            pause(100)
         if story.check_last_answer(convert_to_text(result)):
             info.change_score_by(10)
         else:
             info.change_score_by(-5)
+        pause(100)
         if _sprite == NPC1:
             sprites.destroy(NPC1, effects.spray, 100)
             NPC1 = sprites.create(assets.image("""
                 NovitaNPC
             """), SpriteKind.NPC)
             tiles.place_on_random_tile(NPC1, sprites.dungeon.collectible_blue_crystal)
-        else:
+        elif _sprite == NPC2:
             sprites.destroy(NPC2, effects.smiles, 100)
             NPC2 = sprites.create(assets.image("""
                 EndangNPC
             """), SpriteKind.NPC)
             tiles.place_on_random_tile(NPC2, sprites.dungeon.collectible_red_crystal)
+        pause(100)
         isMenu = False
 
 def on_right_pressed():
@@ -316,7 +319,7 @@ def doMusic(_level2: number):
                 Kebunku
             """)),
             music.PlaybackMode.LOOPING_IN_BACKGROUND)
-    else:
+    elif _level2 == 2:
         music.play(music.create_song(assets.song("""
                 Kebunku0
             """)),
@@ -330,16 +333,24 @@ controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
 
 def on_on_overlap2(sprite2, otherSprite2):
     global isLevel
-    if isLevel == 1 or isLevel == 2:
-        isLevel += 1
+    sprites.destroy(FinalNPC, effects.hearts, 500)
+    info.set_score(0)
+    controller.move_sprite(Dzakir, 0, 0)
+    if isLevel == 1:
         music.stop_all_sounds()
-        music.play(music.create_song(hex("""
-                00780004080200
-            """)),
+        music.play(music.melody_playable(music.magic_wand),
             music.PlaybackMode.UNTIL_DONE)
+        isLevel = 2
         pause(100)
         initLevel(isLevel)
-    elif isLevel == 3:
+    elif isLevel == 2:
+        music.stop_all_sounds()
+        music.play(music.melody_playable(music.magic_wand),
+            music.PlaybackMode.UNTIL_DONE)
+        isLevel = 3
+        pause(100)
+        initLevel(isLevel)
+    elif isLevel > 3:
         game.set_game_over_message(True, "GAME OVER!")
         game.game_over(True)
 sprites.on_overlap(SpriteKind.player, SpriteKind.food, on_on_overlap2)
@@ -353,7 +364,7 @@ def initLevel(_level22: number):
         tiles.set_current_tilemap(tilemap("""
             level2
         """))
-    else:
+    elif _level22 == 3:
         tiles.set_current_tilemap(tilemap("""
             level3
         """))
@@ -382,7 +393,7 @@ def on_forever():
     if isMenu == True:
         controller.move_sprite(Dzakir, 0, 0)
         animation.stop_animation(animation.AnimationTypes.ALL, Dzakir)
-    else:
+    elif isMenu == False:
         controller.move_sprite(Dzakir, 100, 100)
 forever(on_forever)
 
